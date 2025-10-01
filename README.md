@@ -83,7 +83,7 @@ gcloud run deploy keycloak \
   --min-instances 1 \
   --max-instances 1 \
   --set-env-vars KC_HTTP_ENABLED=true,KC_HTTP_PORT=8080,KC_PROXY=edge,KC_PROXY_HEADERS=xforwarded,KC_BOOTSTRAP_ADMIN_USERNAME=admin,KC_BOOTSTRAP_ADMIN_PASSWORD=admin,KC_HOSTNAME_STRICT=false,KC_DB=postgres,KC_DB_URL=jdbc:postgresql://$IP_BD:5432/postgres,KC_DB_USERNAME=postgres,KC_DB_PASSWORD=$PASSWORD_BD \
-  --args=start -- --import-realm
+  --args=start,--import-realm
 
 Notas para Cloud Run:
 
