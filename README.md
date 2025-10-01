@@ -43,7 +43,6 @@ El servicio de Keycloak está configurado para importar un realm al arrancar usa
 - Rol de realm creado: `Administrador` y demas roles de medisupply
 - Usuario inicial creado: `medisupply05@gmail.com` con contraseña `admin` (no temporal)
 - Cliente OIDC creado: `medisupply-app` (público, Direct Access Grants habilitado)
-```
 
 ## Despliegue en Google Cloud Run
 
@@ -55,9 +54,9 @@ El servicio de Keycloak está configurado para importar un realm al arrancar usa
 
 ### Cambiar variables antes de correr los comandos
 
-- $PROJECT_ID: ID del proyecto en GCP
-- $IP_BD: Ip de la base de datos
-- $PASSWORD_BD: Password de la base de datos
+- `$PROJECT_ID`: ID del proyecto en GCP
+- `$IP_BD`: Ip de la base de datos
+- `$PASSWORD_BD`: Password de la base de datos
 
 ### Desplegar keycloak
 
@@ -84,6 +83,7 @@ gcloud run deploy keycloak \
   --max-instances 1 \
   --set-env-vars KC_HTTP_ENABLED=true,KC_HTTP_PORT=8080,KC_PROXY=edge,KC_PROXY_HEADERS=xforwarded,KC_BOOTSTRAP_ADMIN_USERNAME=admin,KC_BOOTSTRAP_ADMIN_PASSWORD=admin,KC_HOSTNAME_STRICT=false,KC_DB=postgres,KC_DB_URL=jdbc:postgresql://$IP_BD:5432/postgres,KC_DB_USERNAME=postgres,KC_DB_PASSWORD=$PASSWORD_BD \
   --args=start,--import-realm
+```
 
 Notas para Cloud Run:
 
