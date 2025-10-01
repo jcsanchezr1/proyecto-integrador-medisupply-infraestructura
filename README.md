@@ -1,1 +1,80 @@
-# proyecto-integrador-medisupply-infraestructura
+# Proyecto Integrador Medisupply - Infraestructura
+
+Este repositorio contiene la configuración de infraestructura para el proyecto Medisupply.
+
+## Estructura del Proyecto
+
+```
+├── keycloak/               # Directorio con la configuracion de keycloak
+│   ├── Dockerfile          # Imagen de Docker para Keycloak
+├── docker-compose.yml      # Configuración para desarrollo local
+└── README.md
+```
+
+## Servicios Incluidos
+
+- **medisupply-db**: Base de datos PostgreSQL central para todo el sistema Medisupply
+- **keycloak**: Servidor de autenticación y autorización
+
+## Desarrollo Local
+
+### Prerrequisitos
+
+- Docker
+- Docker Compose
+
+### Iniciar el entorno local
+
+```bash
+# Clonar el repositorio
+git clone <repository-url>
+cd proyecto-integrador-medisupply-infraestructura
+
+# Iniciar los servicios
+docker-compose up -d
+```
+
+## Despliegue en Google Cloud Run
+
+### Prerrequisitos
+
+- Google Cloud SDK instalado y configurado
+- Proyecto de Google Cloud configurado
+- Base de datos PostgreSQL en Cloud SQL
+
+### Cambiar variables antes de correr los comandos
+
+- $PROJECT_ID: ID del proyecto en GCP
+- $IP_BD: Ip de la base de datos
+- $PASSWORD_BD: Password de la base de datos
+
+### Desplegar keycloak
+
+```bash
+# Construir la imagen
+docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/medisupply-repository/keycloak:26.3 ./keycloak
+
+# Construir la imagen arquitectura amd64
+docker build --platform=linux/amd64 -t us-central1-docker.pkg.dev/$PROJECT_ID/medisupply-repository/keycloak:26.3 ./keycloak
+
+# Subir la imagen
+docker push us-central1-docker.pkg.dev/$PROJECT_ID/medisupply-repository/keycloak:26.3
+
+# Desplegar en Cloud Run
+gcloud run deploy keycloak \
+  --image us-central1-docker.pkg.dev/$PROJECT_ID/medisupply-repository/keycloak:26.3 \
+  --region us-central1 \
+  --platform managed \
+  --allow-unauthenticated \
+  --port 8080 \
+  --memory 2Gi \
+  --cpu 2 \
+  --min-instances 1 \
+  --max-instances 1 \
+  --set-env-vars KC_HTTP_ENABLED=true,KC_HTTP_PORT=8080,KC_PROXY=edge,KC_PROXY_HEADERS=xforwarded,KC_BOOTSTRAP_ADMIN_USERNAME=admin,KC_BOOTSTRAP_ADMIN_PASSWORD=admin,KC_HOSTNAME_STRICT=false,KC_DB=postgres,KC_DB_URL=jdbc:postgresql://$IP_BD:5432/postgres,KC_DB_USERNAME=postgres,KC_DB_PASSWORD=$PASSWORD_BD \
+  --args=start
+```
+
+## Configuración de Base de Datos
+
+El proyecto utiliza PostgreSQL como base de datos central para todo el sistema Medisupply. Esta se creará en el servicio de Cloud SQL.
