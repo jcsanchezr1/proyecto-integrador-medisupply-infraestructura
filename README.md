@@ -34,6 +34,17 @@ cd proyecto-integrador-medisupply-infraestructura
 docker-compose up -d
 ```
 
+### Importar automáticamente el realm en Keycloak
+
+El servicio de Keycloak está configurado para importar un realm al arrancar usando `--import-realm` y un volumen con los archivos de importación.
+
+- Archivo de importación: `keycloak/realm-export/medisupply-realm-realm.json`
+- Realm creado: `medisupply-realm`
+- Rol de realm creado: `Administrador` y demas roles de medisupply
+- Usuario inicial creado: `medisupply05@gmail.com` con contraseña `admin` (no temporal)
+- Cliente OIDC creado: `medisupply-app` (público, Direct Access Grants habilitado)
+```
+
 ## Despliegue en Google Cloud Run
 
 ### Prerrequisitos
@@ -72,8 +83,12 @@ gcloud run deploy keycloak \
   --min-instances 1 \
   --max-instances 1 \
   --set-env-vars KC_HTTP_ENABLED=true,KC_HTTP_PORT=8080,KC_PROXY=edge,KC_PROXY_HEADERS=xforwarded,KC_BOOTSTRAP_ADMIN_USERNAME=admin,KC_BOOTSTRAP_ADMIN_PASSWORD=admin,KC_HOSTNAME_STRICT=false,KC_DB=postgres,KC_DB_URL=jdbc:postgresql://$IP_BD:5432/postgres,KC_DB_USERNAME=postgres,KC_DB_PASSWORD=$PASSWORD_BD \
-  --args=start
-```
+  --args=start -- --import-realm
+
+Notas para Cloud Run:
+
+- El `Dockerfile` copia el directorio `keycloak/realm-export` a `/opt/keycloak/data/import`, por lo que al iniciar con `--import-realm` se cargará el realm automáticamente.
+- Si actualizas el JSON del realm, vuelve a construir y publicar la imagen antes de desplegar.
 
 ## Configuración de Base de Datos
 
