@@ -9,7 +9,8 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 │   ├── Dockerfile          # Imagen de Docker para Keycloak
 ├── api-gateway/            # Configuración del API Gateway
 │   ├── openapi-gateway.yaml # Configuración OpenAPI del gateway
-│   └── deploy.sh           # Script de despliegue del gateway
+│   ├── deploy.sh           # Script de despliegue del gateway
+│   └── delete.sh           # Script de eliminación del gateway
 ├── docker-compose.yml      # Configuración para desarrollo local
 └── README.md
 ```
@@ -110,6 +111,19 @@ Para probar:
 ```bash
 curl https://[GATEWAY_URL]/auth/ping
 ```
+
+### Eliminar API Gateway
+
+```bash
+cd api-gateway
+chmod +x delete.sh
+./delete.sh
+```
+
+El script elimina:
+- Gateway
+- Todas las configuraciones del API
+- El API completo
 
 ## Configuración de Base de Datos
 
