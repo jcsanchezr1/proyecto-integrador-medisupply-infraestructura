@@ -12,6 +12,8 @@ services:
       - medisupply_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - medisupply-net
 
   keycloak:
     image: keycloak/keycloak:26.3
@@ -31,6 +33,12 @@ services:
     volumes:
       - ./keycloak/realm-export:/opt/keycloak/data/import:ro
     depends_on: [medisupply-db]
+    networks:
+      - medisupply-net
 
 volumes:
   medisupply_data:
+
+networks:
+  medisupply-net:
+    external: true
