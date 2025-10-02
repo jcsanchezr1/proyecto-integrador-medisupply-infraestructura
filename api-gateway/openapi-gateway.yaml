@@ -1,0 +1,58 @@
+swagger: '2.0'
+info:
+  title: MediSupply API Gateway
+  version: 1.0.0
+
+schemes:
+  - https
+
+paths:
+  # Health Check del servicio de autenticación
+  /auth/ping:
+    get:
+      summary: Health Check del servicio de autenticación
+      operationId: getAuthPing
+      x-google-backend:
+        address: https://medisupply-authenticator-ms-980832092663.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Servicio funcionando correctamente
+        '404':
+          description: Servicio no encontrado
+        '500':
+          description: Error interno del servidor
+
+  # Endpoint genérico para rutas no encontradas
+  /{path}:
+    get:
+      summary: Endpoint no encontrado
+      operationId: getNotFound
+      parameters:
+        - name: path
+          in: path
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Endpoint no encontrado
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Endpoint not found"
+              message:
+                type: string
+                example: "The requested endpoint does not exist"
+              status:
+                type: integer
+                example: 404
+
+# Configuración de CORS
+x-google-cors:
+  - allowOrigin: "*"
+    allowMethods: "GET, POST, PUT, DELETE, OPTIONS"
+    allowHeaders: "Content-Type, Authorization, X-Requested-With"
+    maxAge: 3600

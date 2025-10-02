@@ -7,6 +7,9 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 ```
 ├── keycloak/               # Directorio con la configuracion de keycloak
 │   ├── Dockerfile          # Imagen de Docker para Keycloak
+├── api-gateway/            # Configuración del API Gateway
+│   ├── openapi-gateway.yaml # Configuración OpenAPI del gateway
+│   └── deploy.sh           # Script de despliegue del gateway
 ├── docker-compose.yml      # Configuración para desarrollo local
 └── README.md
 ```
@@ -15,6 +18,7 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 
 - **medisupply-db**: Base de datos PostgreSQL central para todo el sistema Medisupply
 - **keycloak**: Servidor de autenticación y autorización
+- **api-gateway**: Gateway para redirigir requests a los microservicios
 
 ## Desarrollo Local
 
@@ -89,6 +93,23 @@ Notas para Cloud Run:
 
 - El `Dockerfile` copia el directorio `keycloak/realm-export` a `/opt/keycloak/data/import`, por lo que al iniciar con `--import-realm` se cargará el realm automáticamente.
 - Si actualizas el JSON del realm, vuelve a construir y publicar la imagen antes de desplegar.
+
+### Desplegar API Gateway
+
+```bash
+cd api-gateway
+chmod +x deploy.sh
+./deploy.sh
+```
+
+El API Gateway redirige:
+- `/auth/ping` al servicio de autenticación en Cloud Run
+- Cualquier otra ruta retorna 404
+
+Para probar:
+```bash
+curl https://[GATEWAY_URL]/auth/ping
+```
 
 ## Configuración de Base de Datos
 
