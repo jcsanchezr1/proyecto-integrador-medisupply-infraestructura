@@ -13,7 +13,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - app_net
+      - medisupply-net
 
   keycloak:
     image: keycloak/keycloak:26.3
@@ -34,7 +34,7 @@ services:
       - ./keycloak/realm-export:/opt/keycloak/data/import:ro
     depends_on: [medisupply-db]
     networks:
-      - app_net
+      - medisupply-net
 
   autenticador:
     image: medisupply-autenticador
@@ -49,7 +49,7 @@ services:
       - "8081:8080"
     depends_on: [medisupply-db]
     networks:
-      - app_net
+      - medisupply-net
 
   proveedores:
     image: medisupply-proveedores
@@ -64,12 +64,11 @@ services:
       - "8082:8080"
     depends_on: [medisupply-db]
     networks:
-      - app_net
-
-networks:
-  app_net:
-    name: medisupply_app_net
-    driver: bridge
+      - medisupply-net
 
 volumes:
   medisupply_data:
+
+networks:
+  medisupply-net:
+    external: true
