@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   medisupply-db:
     image: postgres:17
@@ -71,4 +69,4 @@ volumes:
 
 networks:
   medisupply-net:
-    external: true
+    driver: bridge
