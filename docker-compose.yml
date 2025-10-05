@@ -12,6 +12,8 @@ services:
       - medisupply_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - app_net
 
   keycloak:
     image: keycloak/keycloak:26.3
@@ -31,6 +33,43 @@ services:
     volumes:
       - ./keycloak/realm-export:/opt/keycloak/data/import:ro
     depends_on: [medisupply-db]
+    networks:
+      - app_net
+
+  autenticador:
+    image: medisupply-autenticador
+    container_name: medisupply-autenticador
+    build:
+      context: ../proyecto-integrador-medisupply-autenticador-backend
+    environment:
+      - HOST=0.0.0.0
+      - DEBUG=true
+      - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
+    ports:
+      - "8081:8080"
+    depends_on: [medisupply-db]
+    networks:
+      - app_net
+
+  proveedores:
+    image: medisupply-proveedores
+    container_name: medisupply-proveedores
+    build:
+      context: ../proyecto-integrador-medisupply-proveedores-backend
+    environment:
+      - HOST=0.0.0.0
+      - DEBUG=true
+      - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
+    ports:
+      - "8082:8080"
+    depends_on: [medisupply-db]
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    name: medisupply_app_net
+    driver: bridge
 
 volumes:
   medisupply_data:
