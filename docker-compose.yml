@@ -64,6 +64,21 @@ services:
     networks:
       - medisupply-net
 
+  inventarios:
+    image: medisupply-inventarios
+    container_name: medisupply-inventarios
+    build:
+      context: ../proyecto-integrador-medisupply-inventarios-backend
+    environment:
+      - HOST=0.0.0.0
+      - DEBUG=true
+      - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
+    ports:
+      - "8083:8080"
+    depends_on: [medisupply-db]
+    networks:
+      - medisupply-net
+
 volumes:
   medisupply_data:
 
