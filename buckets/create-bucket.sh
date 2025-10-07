@@ -6,7 +6,7 @@
 set -e
 
 # Configuración por defecto para MediSupply (basada en api-gateway existente)
-PROJECT_ID="${GCP_PROJECT_ID:-soluciones-cloud-2024-02}"
+PROJECT_ID="${GCP_PROJECT_ID:-clean-result-473723-t3}"
 BUCKET_NAME="${BUCKET_NAME:-medisupply-images-bucket}"
 LOCATION="${BUCKET_LOCATION:-us-central1}"
 STORAGE_CLASS="${STORAGE_CLASS:-STANDARD}"
@@ -22,14 +22,14 @@ show_help() {
     echo "Uso: $0 [OPCIONES]"
     echo ""
     echo "Configuración por defecto para MediSupply:"
-    echo "  Proyecto: soluciones-cloud-2024-02"
+    echo "  Proyecto: clean-result-473723-t3"
     echo "  Bucket: medisupply-images-bucket"
     echo "  Ubicación: us-central1"
     echo "  Acceso: privado (URLs firmadas - 3 meses)"
     echo "  Carpetas: providers/, products/"
     echo ""
     echo "Opciones:"
-    echo "  -p, --project-id ID     ID del proyecto de GCP (default: soluciones-cloud-2024-02)"
+    echo "  -p, --project-id ID     ID del proyecto de GCP (default: clean-result-473723-t3)"
     echo "  -b, --bucket-name NAME  Nombre del bucket (default: medisupply-images-bucket)"
     echo "  -l, --location LOC      Ubicación del bucket (default: us-central1)"
     echo "  -s, --storage-class SC  Clase de almacenamiento (default: STANDARD)"

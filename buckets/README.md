@@ -37,5 +37,5 @@ https://storage.googleapis.com/medisupply-images-bucket/products/product_uuid.jp
 
 ## Prerrequisitos
 - Google Cloud SDK instalado
-- Proyecto `soluciones-cloud-2024-02` configurado
+- Proyecto `clean-result-473723-t3` configurado
 - Permisos de Storage Admin

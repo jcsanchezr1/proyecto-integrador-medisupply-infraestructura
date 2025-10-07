@@ -6,21 +6,21 @@
 ```bash
 gcloud iam service-accounts create medisupply-storage-service \
   --display-name="MediSupply Storage Service" \
-  --project=soluciones-cloud-2024-02
+  --project=clean-result-473723-t3
 ```
 
 ### 2. Asignar Permisos
 ```bash
-gcloud projects add-iam-policy-binding soluciones-cloud-2024-02 \
-  --member="serviceAccount:medisupply-storage-service@soluciones-cloud-2024-02.iam.gserviceaccount.com" \
+gcloud projects add-iam-policy-binding clean-result-473723-t3 \
+  --member="serviceAccount:medisupply-storage-service@clean-result-473723-t3.iam.gserviceaccount.com" \
   --role="roles/storage.objectAdmin"
 ```
 
 ### 3. Generar Credenciales
 ```bash
 gcloud iam service-accounts keys create gcp-credentials.json \
-  --iam-account=medisupply-storage-service@soluciones-cloud-2024-02.iam.gserviceaccount.com \
-  --project=soluciones-cloud-2024-02
+  --iam-account=medisupply-storage-service@clean-result-473723-t3.iam.gserviceaccount.com \
+  --project=clean-result-473723-t3
 ```
 
 ### 4. Verificar Configuración

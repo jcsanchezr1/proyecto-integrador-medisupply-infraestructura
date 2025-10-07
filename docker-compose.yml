@@ -78,7 +78,7 @@ services:
       - HOST=0.0.0.0
       - DEBUG=true
       - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
-      - GCP_PROJECT_ID=soluciones-cloud-2024-02
+      - GCP_PROJECT_ID=clean-result-473723-t3
       - BUCKET_NAME=medisupply-images-bucket
       - BUCKET_FOLDER=providers
       - BUCKET_LOCATION=us-central1
@@ -100,7 +100,7 @@ services:
       - HOST=0.0.0.0
       - DEBUG=true
       - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
-      - GCP_PROJECT_ID=soluciones-cloud-2024-02
+      - GCP_PROJECT_ID=clean-result-473723-t3
       - BUCKET_NAME=medisupply-images-bucket
       - BUCKET_FOLDER=products
       - BUCKET_LOCATION=us-central1

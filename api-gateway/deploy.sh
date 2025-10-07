@@ -3,7 +3,7 @@
 # Script simple para desplegar API Gateway
 set -e
 
-PROJECT_ID="soluciones-cloud-2024-02"
+PROJECT_ID="clean-result-473723-t3"
 REGION="us-central1"
 GATEWAY_NAME="medisupply-gateway"
 
