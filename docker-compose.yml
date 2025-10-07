@@ -43,9 +43,29 @@ services:
       - HOST=0.0.0.0
       - DEBUG=true
       - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
+      - KC_BASE_URL=http://keycloak:8080
+      - KC_ADMIN_USER=admin
+      - KC_ADMIN_PASSWORD=admin
     ports:
       - "8081:8080"
     depends_on: [medisupply-db]
+    networks:
+      - medisupply-net
+
+  autorizador:
+    image: medisupply-autorizador
+    container_name: medisupply-autorizador
+    build:
+      context: ../proyecto-integrador-medisupply-autorizador-backend
+    environment:
+      - HOST=0.0.0.0
+      - DEBUG=true
+      - KEYCLOAK_SERVER_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=medisupply-realm
+      - KEYCLOAK_CLIENT_ID=medisupply-app
+    ports:
+      - "8082:8080"
+    depends_on: [keycloak]
     networks:
       - medisupply-net
 
@@ -66,7 +86,7 @@ services:
     volumes:
       - ./credentials/gcp-credentials.json:/app/credentials/gcp-credentials.json:ro
     ports:
-      - "8082:8080"
+      - "8083:8080"
     depends_on: [medisupply-db]
     networks:
       - medisupply-net
@@ -88,7 +108,7 @@ services:
     volumes:
       - ./credentials/gcp-credentials.json:/app/credentials/gcp-credentials.json:ro
     ports:
-      - "8083:8080"
+      - "8084:8080"
     depends_on: [medisupply-db]
     networks:
       - medisupply-net
