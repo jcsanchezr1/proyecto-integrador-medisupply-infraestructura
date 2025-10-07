@@ -11,6 +11,12 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 │   ├── openapi-gateway.yaml # Configuración OpenAPI del gateway
 │   ├── deploy.sh           # Script de despliegue del gateway
 │   └── delete.sh           # Script de eliminación del gateway
+├── buckets/                # Configuración de Google Cloud Storage
+│   ├── create-bucket.sh    # Script para crear bucket de imágenes
+│   └── README.md           # Documentación del bucket
+├── credentials/            # Credenciales de Google Cloud (NO subir a Git)
+│   ├── verify-setup.sh     # Script de verificación de configuración
+│   └── README.md           # Documentación de credenciales
 ├── docker-compose.yml      # Configuración para desarrollo local
 └── README.md
 ```
@@ -20,6 +26,8 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 - **medisupply-db**: Base de datos PostgreSQL central para todo el sistema Medisupply
 - **keycloak**: Servidor de autenticación y autorización
 - **api-gateway**: Gateway para redirigir requests a los microservicios
+- **proveedores**: Microservicio de gestión de proveedores con almacenamiento de imágenes
+- **inventarios**: Microservicio de gestión de inventarios con almacenamiento de imágenes
 
 ## Desarrollo Local
 
@@ -27,6 +35,35 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 
 - Docker
 - Docker Compose
+- Google Cloud SDK (opcional, para crear bucket)
+- Cuenta de Google Cloud con proyecto configurado
+
+### Configuración Inicial
+
+#### 1. Configurar credenciales de Google Cloud Storage
+
+```bash
+# Ir a la carpeta de credenciales
+cd credentials
+
+# Verificar configuración actual
+./verify-setup.sh
+
+# Si no tienes credenciales, sigue las instrucciones en credentials/README.md
+```
+
+#### 2. Crear bucket de Google Cloud Storage
+
+```bash
+# Ir a la carpeta de buckets
+cd buckets
+
+# Crear el bucket (usar configuración por defecto)
+./create-bucket.sh
+
+# O crear bucket público (opcional)
+./create-bucket.sh --public
+```
 
 ### Iniciar el entorno local
 
@@ -34,6 +71,9 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 # Clonar el repositorio
 git clone <repository-url>
 cd proyecto-integrador-medisupply-infraestructura
+
+# Configurar credenciales (ver sección anterior)
+# Crear bucket (ver sección anterior)
 
 # Iniciar los servicios
 docker-compose up -d
@@ -124,6 +164,38 @@ El script elimina:
 - Gateway
 - Todas las configuraciones del API
 - El API completo
+
+## Almacenamiento de Imágenes
+
+El proyecto utiliza Google Cloud Storage para almacenar imágenes de proveedores y productos:
+
+- **Bucket**: `medisupply-images-bucket` (configurable)
+- **Carpetas**: 
+  - `providers/` - Logos de proveedores
+  - `products/` - Imágenes de productos
+- **Acceso**: Privado con URLs firmadas (expiración: 3 meses)
+- **Configuración**: Variables de entorno en `docker-compose.yml`
+
+### URLs de Ejemplo
+
+```
+# Proveedores
+https://storage.googleapis.com/medisupply-images-bucket/providers/logo_uuid.jpg
+
+# Productos  
+https://storage.googleapis.com/medisupply-images-bucket/products/product_uuid.jpg
+```
+
+### Configuración de Credenciales
+
+Las credenciales se configuran mediante archivo JSON montado como volumen:
+
+```yaml
+volumes:
+  - ./credentials/gcp-credentials.json:/app/credentials/gcp-credentials.json:ro
+environment:
+  - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/gcp-credentials.json
+```
 
 ## Configuración de Base de Datos
 

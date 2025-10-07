@@ -1,5 +1,26 @@
-# Intellij IDEA
-.idea/*
+# Credenciales de Google Cloud (NO subir a Git)
+credentials/gcp-credentials.json
 
-# MacOS
+# Archivos de configuración sensibles
+*.json
+!gcp-credentials.json.example
+!package*.json
+!tsconfig*.json
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Docker
+.dockerignore
+
+# IDE
+.vscode/
+.idea/
+
+# OS
 .DS_Store
+Thumbs.db
