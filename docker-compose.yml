@@ -46,6 +46,13 @@ services:
       - KC_BASE_URL=http://keycloak:8080
       - KC_ADMIN_USER=admin
       - KC_ADMIN_PASSWORD=admin
+      - GCP_PROJECT_ID=clean-result-473723-t3
+      - BUCKET_NAME=medisupply-images-bucket
+      - BUCKET_FOLDER=users
+      - BUCKET_LOCATION=us-central1
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/gcp-credentials.json
+    volumes:
+      - ./credentials/gcp-credentials.json:/app/credentials/gcp-credentials.json:ro
     ports:
       - "8081:8080"
     depends_on: [medisupply-db]
