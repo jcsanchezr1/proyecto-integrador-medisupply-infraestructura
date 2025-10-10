@@ -163,9 +163,19 @@ paths:
         default:
           description: Respuesta reenvíada desde backend (cualquier código)
 
-# Configuración de CORS
+# Configuración de CORS (manejo de preflight por el API Gateway)
 x-google-cors:
-  - allowOrigin: "*"
-    allowMethods: "GET, POST, PUT, DELETE, OPTIONS"
-    allowHeaders: "Content-Type, Authorization, X-Requested-With"
-    maxAge: 3600
+  allowOrigins:
+    - "*"
+  allowMethods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
+  allowHeaders:
+    - Content-Type
+    - Authorization
+    - X-Requested-With
+  maxAge: "3600"
+  allowCredentials: false
