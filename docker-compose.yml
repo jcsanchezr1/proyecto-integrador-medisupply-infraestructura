@@ -8,6 +8,7 @@ services:
       POSTGRES_PASSWORD: medisupply_local_password
     volumes:
       - medisupply_data:/var/lib/postgresql/data
+      - ./db/init/medisupply_init.sql:/docker-entrypoint-initdb.d/medisupply_init.sql:ro
     ports:
       - "5432:5432"
     networks:
@@ -51,6 +52,7 @@ services:
       - BUCKET_FOLDER=users
       - BUCKET_LOCATION=us-central1
       - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/gcp-credentials.json
+      - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
     volumes:
       - ./credentials/gcp-credentials.json:/app/credentials/gcp-credentials.json:ro
     ports:
@@ -70,6 +72,7 @@ services:
       - KEYCLOAK_SERVER_URL=http://keycloak:8080
       - KEYCLOAK_REALM=medisupply-realm
       - KEYCLOAK_CLIENT_ID=medisupply-app
+      - AUTHENTICATOR_SERVICE_URL=http://medisupply-autenticador:8080
     ports:
       - "8082:8080"
     depends_on: [keycloak]
