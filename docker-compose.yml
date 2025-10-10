@@ -112,6 +112,7 @@ services:
       - BUCKET_FOLDER=products
       - BUCKET_LOCATION=us-central1
       - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/gcp-credentials.json
+      - PROVIDERS_SERVICE_URL=http://medisupply-proveedores:8080
     volumes:
       - ./credentials/gcp-credentials.json:/app/credentials/gcp-credentials.json:ro
     ports:
