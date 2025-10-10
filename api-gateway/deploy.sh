@@ -44,4 +44,4 @@ GATEWAY_URL=$(gcloud api-gateway gateways describe ${GATEWAY_NAME}-gw \
 echo ""
 echo "¡API Gateway desplegado!"
 echo "URL: https://$GATEWAY_URL"
-echo "Health Check: https://$GATEWAY_URL/auth/ping"
+echo "Health Check: https://$GATEWAY_URL/authorizer/ping"

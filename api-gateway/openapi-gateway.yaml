@@ -5,15 +5,17 @@ info:
 
 schemes:
   - https
+ 
+security: []
 
 paths:
-  # Health Check del servicio de autenticación
-  /auth/ping:
+  # Health Check del servicio de autorizacion
+  /authorizer/ping:
     get:
-      summary: Health Check del servicio de autenticación
+      summary: Health Check del servicio de autorizacion
       operationId: getAuthPing
       x-google-backend:
-        address: https://medisupply-authenticator-ms-980832092663.us-central1.run.app
+        address: https://medisupply-authorizer-ms-1034901101791.us-central1.run.app
         path_translation: APPEND_PATH_TO_ADDRESS
         disable_auth: true
       responses:
@@ -25,30 +27,141 @@ paths:
           description: Error interno del servidor
 
   # Endpoint genérico para rutas no encontradas
-  /{path}:
+  # Ruta catch-all: reenvía cualquier ruta y método al servicio Cloud Run
+  /{proxy=**}:
+    parameters:
+      - name: proxy
+        in: path
+        required: true
+        type: string
+
+    # Aceptar y reenviar GET
     get:
-      summary: Endpoint no encontrado
-      operationId: getNotFound
-      parameters:
-        - name: path
-          in: path
-          required: true
-          type: string
+      summary: Proxy GET — reenvía al Cloud Run
+      operationId: proxyGet
+      x-google-backend:
+        address: https://medisupply-authorizer-ms-1034901101791.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      produces:
+        - application/json
+        - application/octet-stream
+        - text/plain
       responses:
-        '404':
-          description: Endpoint no encontrado
-          schema:
-            type: object
-            properties:
-              error:
-                type: string
-                example: "Endpoint not found"
-              message:
-                type: string
-                example: "The requested endpoint does not exist"
-              status:
-                type: integer
-                example: 404
+        '200':
+          description: Respuesta reenvíada desde backend
+        default:
+          description: Respuesta reenvíada desde backend (cualquier código)
+
+    # Aceptar y reenviar POST (incluye form-data, raw JSON, etc.)
+    post:
+      summary: Proxy POST — reenvía al Cloud Run
+      operationId: proxyPost
+      x-google-backend:
+        address: https://medisupply-authorizer-ms-1034901101791.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      consumes:
+        - application/json
+        - multipart/form-data
+        - application/x-www-form-urlencoded
+        - application/octet-stream
+      produces:
+        - application/json
+        - application/octet-stream
+      responses:
+        '200':
+          description: Respuesta reenvíada desde backend
+        default:
+          description: Respuesta reenvíada desde backend (cualquier código)
+
+    # Aceptar y reenviar PUT
+    put:
+      summary: Proxy PUT — reenvía al Cloud Run
+      operationId: proxyPut
+      x-google-backend:
+        address: https://medisupply-authorizer-ms-1034901101791.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      consumes:
+        - application/json
+        - multipart/form-data
+        - application/x-www-form-urlencoded
+        - application/octet-stream
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Respuesta reenvíada desde backend
+        default:
+          description: Respuesta reenvíada desde backend (cualquier código)
+
+    # Aceptar y reenviar PATCH
+    patch:
+      summary: Proxy PATCH — reenvía al Cloud Run
+      operationId: proxyPatch
+      x-google-backend:
+        address: https://medisupply-authorizer-ms-1034901101791.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      consumes:
+        - application/json
+        - application/octet-stream
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Respuesta reenvíada desde backend
+        default:
+          description: Respuesta reenvíada desde backend (cualquier código)
+
+    # Aceptar y reenviar DELETE
+    delete:
+      summary: Proxy DELETE — reenví­a al Cloud Run
+      operationId: proxyDelete
+      x-google-backend:
+        address: https://medisupply-authorizer-ms-1034901101791.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Respuesta reenvíada desde backend
+        default:
+          description: Respuesta reenvíada desde backend (cualquier código)
+
+    # Aceptar OPTIONS (CORS preflight) — devolverá lo que el backend o gateway determine
+    options:
+      summary: CORS / preflight proxy
+      operationId: proxyOptions
+      x-google-backend:
+        address: https://medisupply-authorizer-ms-1034901101791.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Preflight o respuesta del backend
+        default:
+          description: Respuesta reenvíada desde backend (cualquier código)
+
+    # HEAD por completitud
+    head:
+      summary: Proxy HEAD — reenví­a al Cloud Run
+      operationId: proxyHead
+      x-google-backend:
+        address: https://medisupply-authorizer-ms-1034901101791.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Respuesta reenvíada desde backend
+        default:
+          description: Respuesta reenvíada desde backend (cualquier código)
 
 # Configuración de CORS
 x-google-cors:
