@@ -51,10 +51,10 @@ services:
       - BUCKET_NAME=medisupply-images-bucket
       - BUCKET_FOLDER=users
       - BUCKET_LOCATION=us-central1
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/gcp-credentials.json
+      - GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-credentials.json
       - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
     volumes:
-      - ./credentials/gcp-credentials.json:/app/credentials/gcp-credentials.json:ro
+      - ./credentials/gcp-credentials.json:/tmp/gcp-credentials.json:ro
     ports:
       - "8081:8080"
     depends_on: [medisupply-db]
@@ -92,9 +92,10 @@ services:
       - BUCKET_NAME=medisupply-images-bucket
       - BUCKET_FOLDER=providers
       - BUCKET_LOCATION=us-central1
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/gcp-credentials.json
+      - GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-credentials.json
+      - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
     volumes:
-      - ./credentials/gcp-credentials.json:/app/credentials/gcp-credentials.json:ro
+      - ./credentials/gcp-credentials.json:/tmp/gcp-credentials.json:ro
     ports:
       - "8083:8080"
     depends_on: [medisupply-db]
@@ -114,10 +115,11 @@ services:
       - BUCKET_NAME=medisupply-images-bucket
       - BUCKET_FOLDER=products
       - BUCKET_LOCATION=us-central1
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/gcp-credentials.json
+      - GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-credentials.json
+      - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
       - PROVIDERS_SERVICE_URL=http://medisupply-proveedores:8080
     volumes:
-      - ./credentials/gcp-credentials.json:/app/credentials/gcp-credentials.json:ro
+      - ./credentials/gcp-credentials.json:/tmp/gcp-credentials.json:ro
     ports:
       - "8084:8080"
     depends_on: [medisupply-db]
