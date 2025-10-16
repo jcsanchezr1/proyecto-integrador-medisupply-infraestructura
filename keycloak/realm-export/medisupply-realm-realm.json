@@ -72,7 +72,7 @@
       "credentials": [
         {
           "type": "password",
-          "value": "admin",
+          "value": "Admin123456",
           "temporary": false
         }
       ],
