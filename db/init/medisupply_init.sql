@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS users_medisupply (
     specialty varchar(20),
     applicant_name varchar(80),
     applicant_email varchar(100),
+    latitude REAL,
+    longitude REAL,
     enabled boolean NOT NULL DEFAULT FALSE,
     created_at timestamptz NOT NULL DEFAULT timezone('UTC', now()),
     updated_at timestamptz NOT NULL DEFAULT timezone('UTC', now())
