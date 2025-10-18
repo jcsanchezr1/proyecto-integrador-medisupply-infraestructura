@@ -73,6 +73,9 @@ services:
       - KEYCLOAK_REALM=medisupply-realm
       - KEYCLOAK_CLIENT_ID=medisupply-app
       - AUTHENTICATOR_SERVICE_URL=http://medisupply-autenticador:8080
+      - INVENTORIES_SERVICE_URL=http://medisupply-inventarios:8080
+      - PROVIDERS_SERVICE_URL=http://medisupply-proveedores:8080
+      - ORDERS_SERVICE_URL=http://medisupply-pedidos:8080
     ports:
       - "8082:8080"
     depends_on: [keycloak]
