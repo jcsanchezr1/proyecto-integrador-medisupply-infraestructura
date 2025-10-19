@@ -9,6 +9,7 @@
   "defaultLocale": "es",
   "displayName": "Medisupply",
   "displayNameHtml": "Medisupply",
+  "accessTokenLifespan": 3600,
   "requiredActions": [
     { "alias": "VERIFY_EMAIL", "name": "Verify Email", "enabled": false, "defaultAction": false, "priority": 10 },
     { "alias": "CONFIGURE_TOTP", "name": "Configure OTP", "enabled": false, "defaultAction": false, "priority": 20 },
