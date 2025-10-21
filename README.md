@@ -100,6 +100,10 @@ El servicio de Keycloak está configurado para importar un realm al arrancar usa
 - Usuario inicial creado: `medisupply05@gmail.com` con contraseña `admin` (no temporal)
 - Cliente OIDC creado: `medisupply-app` (público, Direct Access Grants habilitado)
 
+## Configuración de Base de Datos
+
+El proyecto utiliza PostgreSQL como base de datos central para todo el sistema Medisupply. Esta se creará en el servicio de Cloud SQL.
+
 ## Despliegue en Google Cloud Run
 
 ### Prerrequisitos
@@ -205,10 +209,6 @@ volumes:
 environment:
   - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/gcp-credentials.json
 ```
-
-## Configuración de Base de Datos
-
-El proyecto utiliza PostgreSQL como base de datos central para todo el sistema Medisupply. Esta se creará en el servicio de Cloud SQL.
 
 ## Creación de tópicos y suscripciones en PubSub
 
