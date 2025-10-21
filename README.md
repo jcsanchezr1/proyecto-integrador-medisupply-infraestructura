@@ -135,7 +135,7 @@ Notas para Cloud Run:
 - El `Dockerfile` copia el directorio `keycloak/realm-export` a `/opt/keycloak/data/import`, por lo que al iniciar con `--import-realm` se cargará el realm automáticamente.
 - Si actualizas el JSON del realm, vuelve a construir y publicar la imagen antes de desplegar.
 
-### Desplegar API Gateway
+## Desplegar API Gateway
 
 ```bash
 cd api-gateway
@@ -200,3 +200,29 @@ environment:
 ## Configuración de Base de Datos
 
 El proyecto utiliza PostgreSQL como base de datos central para todo el sistema Medisupply. Esta se creará en el servicio de Cloud SQL.
+
+## Creación de tópicos y suscripciones en PubSub
+
+Para configurar el sistema de mensajería de Google Cloud Pub/Sub, se proporciona un script que crea automáticamente los tópicos y suscripciones necesarios.
+
+### Prerrequisitos
+
+- Google Cloud SDK instalado
+- Autenticación en GCP configurada (`gcloud auth login`)
+- Permisos necesarios en el proyecto GCP
+
+### Configuración
+
+```bash
+# Hacer el script ejecutable
+chmod +x pubsub/create-gcp-pubsub.sh
+
+# Ejecutar el script de configuración
+./pubsub/create-gcp-pubsub.sh
+```
+
+El script creará:
+- Tópico: `inventory.processing.products`
+- Suscripción push: `inventory.processing.products.processor`
+
+El script es idempotente y puede ejecutarse múltiples veces de forma segura. Si los recursos ya existen, se actualizará su configuración.
