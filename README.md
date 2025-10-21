@@ -7,8 +7,10 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 ```
 ├── keycloak/               # Directorio con la configuracion de keycloak
 │   ├── Dockerfile          # Imagen de Docker para Keycloak
+│   ├── postman/           # Colección de Postman para pruebas de Keycloak
+│   └── realm-export/      # Configuración del realm para importar en Keycloak
 ├── api-gateway/            # Configuración del API Gateway
-│   ├── openapi-gateway.yaml # Configuración OpenAPI del gateway
+│   ├── openapi-gateway.yaml # Configuración OpenAPI del Google Cloud Api Gateway
 │   ├── deploy.sh           # Script de despliegue del gateway
 │   └── delete.sh           # Script de eliminación del gateway
 ├── buckets/                # Configuración de Google Cloud Storage
@@ -17,6 +19,11 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 ├── credentials/            # Credenciales de Google Cloud (NO subir a Git)
 │   ├── verify-setup.sh     # Script de verificación de configuración
 │   └── README.md           # Documentación de credenciales
+├── db/                     # Configuración de base de datos
+│   └── init/              # Scripts de inicialización de BD
+├── pubsub/                # Configuración de Google Cloud Pub/Sub
+│   ├── create-gcp-pubsub.sh # Script para crear tópicos y suscripciones en GCP
+│   └── init.sh            # Script de inicialización para emulador local
 ├── docker-compose.yml      # Configuración para desarrollo local
 └── README.md
 ```
@@ -26,8 +33,12 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 - **medisupply-db**: Base de datos PostgreSQL central para todo el sistema Medisupply
 - **keycloak**: Servidor de autenticación y autorización
 - **api-gateway**: Gateway para redirigir requests a los microservicios
+- **autenticador**: Microservicio de gestión de usuarios y autenticación
+- **autorizador**: Microservicio para manejo de autorización y permisos
 - **proveedores**: Microservicio de gestión de proveedores con almacenamiento de imágenes
 - **inventarios**: Microservicio de gestión de inventarios con almacenamiento de imágenes
+- **pedidos**: Microservicio de gestión de pedidos
+- **pubsub**: Emulador de Google Cloud Pub/Sub para desarrollo local
 
 ## Desarrollo Local
 
@@ -164,8 +175,6 @@ El script elimina:
 - Gateway
 - Todas las configuraciones del API
 - El API completo
-
-## Almacenamiento de Imágenes
 
 El proyecto utiliza Google Cloud Storage para almacenar imágenes de proveedores y productos:
 
