@@ -2,7 +2,6 @@
 credentials/gcp-credentials.json
 
 # Archivos de configuración sensibles
-*.json
 !gcp-credentials.json.example
 !package*.json
 !tsconfig*.json

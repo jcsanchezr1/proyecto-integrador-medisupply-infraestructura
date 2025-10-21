@@ -145,6 +145,14 @@ services:
     networks:
       - medisupply-net
 
+  pubsub:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
+    command: gcloud beta emulators pubsub start --project=clean-result-473723-t3 --host-port=0.0.0.0:8120
+    ports:
+      - "8120:8120"
+    networks:
+      - medisupply-net
+
 volumes:
   medisupply_data:
 

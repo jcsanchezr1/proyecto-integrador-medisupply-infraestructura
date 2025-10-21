@@ -1,0 +1,13 @@
+### Creacion del topico para importacion masiva de productos
+PUT http://localhost:{{port}}/v1/projects/{{project-id}}/topics/inventory.processing.products
+
+### Creacion de la suscripcion asociada al procesamiento del archivo
+PUT http://localhost:{{port}}/v1/projects/{{project-id}}/subscriptions/inventory.processing.products.processor
+Content-Type: application/json
+
+{
+  "topic": "projects/{{project-id}}/topics/inventory.processing.products",
+  "pushConfig": {
+    "pushEndpoint": "http://medisupply-procesador-inventarios:8080/inventory/products/files/process"
+  }
+}
