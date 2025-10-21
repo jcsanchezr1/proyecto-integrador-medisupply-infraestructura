@@ -5,25 +5,25 @@ Este repositorio contiene la configuración de infraestructura para el proyecto 
 ## Estructura del Proyecto
 
 ```
-├── keycloak/                # Directorio con la configuracion de keycloak
-│   ├── Dockerfile           # Imagen de Docker para Keycloak
-│   ├── postman/             # Colección de Postman para pruebas de Keycloak
-│   └── realm-export/        # Configuración del realm para importar en Keycloak
-├── api-gateway/             # Configuración del API Gateway
-│   ├── openapi-gateway.yaml # Configuración OpenAPI del Google Cloud Api Gateway
+├── api-gateway/             # Configuración del Google Cloud API Gateway
+│   ├── openapi-gateway.yaml # Configuración OpenAPI del gateway
 │   ├── deploy.sh            # Script de despliegue del gateway
 │   └── delete.sh            # Script de eliminación del gateway
 ├── buckets/                 # Configuración de Google Cloud Storage
 │   ├── create-bucket.sh     # Script para crear bucket de imágenes
 │   └── README.md            # Documentación del bucket
-├── credentials/             # Credenciales de Google Cloud (NO subir a Git)
+├── credentials/             # Credenciales de Google Cloud (NO SUBIR A GIT)
 │   ├── verify-setup.sh      # Script de verificación de configuración
 │   └── README.md            # Documentación de credenciales
 ├── db/                      # Configuración de base de datos
 │   └── init/                # Scripts de inicialización de BD
+├── keycloak/                # Directorio con la configuracion de keycloak
+│   ├── Dockerfile           # Imagen de Docker para Keycloak
+│   ├── postman/             # Colección de Postman para pruebas de Keycloak
+│   └── realm-export/        # Configuración del realm para importar en Keycloak
 ├── pubsub/                  # Configuración de Google Cloud Pub/Sub
 │   ├── create-gcp-pubsub.sh # Script para crear tópicos y suscripciones en GCP
-│   └── init.sh              # Script de inicialización para emulador local
+│   └── init-local.sh        # Script de inicialización para emulador local
 ├── docker-compose.yml       # Configuración para desarrollo local
 └── README.md
 ```
