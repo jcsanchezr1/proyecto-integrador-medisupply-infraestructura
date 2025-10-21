@@ -147,7 +147,9 @@ services:
 
   pubsub:
     image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
-    command: gcloud beta emulators pubsub start --project=clean-result-473723-t3 --host-port=0.0.0.0:8120
+    volumes:
+      - ./pubsub:/pubsub
+    command: sh /pubsub/init-local.sh
     ports:
       - "8120:8120"
     networks:
