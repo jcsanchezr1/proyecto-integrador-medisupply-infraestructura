@@ -117,6 +117,7 @@ services:
       - GCP_PROJECT_ID=clean-result-473723-t3
       - BUCKET_NAME=medisupply-images-bucket
       - BUCKET_FOLDER=products
+      - BUCKET_FOLDER_PROCESSED_PRODUCTS=processed-products
       - BUCKET_LOCATION=us-central1
       - GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-credentials.json
       - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
@@ -143,6 +144,29 @@ services:
       - INVENTORY_SERVICE_URL=http://medisupply-inventarios:8080
     ports:
       - "8085:8080"
+    depends_on: [medisupply-db]
+    networks:
+      - medisupply-net
+
+  inventarios-procesador:
+    image: medisupply-inventarios-procesador
+    container_name: medisupply-inventarios-procesador
+    build:
+      context: ../proyecto-integrador-medisupply-inventarios-procesador-backend
+    environment:
+      - HOST=0.0.0.0
+      - DEBUG=true
+      - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
+      - GCP_PROJECT_ID=clean-result-473723-t3
+      - BUCKET_NAME=medisupply-images-bucket
+      - BUCKET_FOLDER_PROCESSED_PRODUCTS=processed-products
+      - BUCKET_LOCATION=us-central1
+      - GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-credentials.json
+      - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
+    volumes:
+      - ./credentials/gcp-credentials.json:/tmp/gcp-credentials.json:ro
+    ports:
+      - "8086:8080"
     depends_on: [medisupply-db]
     networks:
       - medisupply-net

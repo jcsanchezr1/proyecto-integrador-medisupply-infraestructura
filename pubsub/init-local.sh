@@ -18,7 +18,7 @@ curl -X PUT http://localhost:8120/v1/projects/clean-result-473723-t3/topics/inve
 curl -X PUT -H "Content-Type: application/json" -d '{
   "topic": "projects/clean-result-473723-t3/topics/inventory.processing.products",
   "pushConfig": {
-    "pushEndpoint": "http://medisupply-procesador-inventarios:8080/inventory/products/files/process"
+    "pushEndpoint": "http://medisupply-inventarios-procesador:8080/inventory-procesor/products/files "
   }
 }' http://localhost:8120/v1/projects/clean-result-473723-t3/subscriptions/inventory.processing.products.processor
 
