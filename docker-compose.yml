@@ -122,6 +122,7 @@ services:
       - GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-credentials.json
       - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
       - PROVIDERS_SERVICE_URL=http://medisupply-proveedores:8080
+      - AUTHENTICATOR_SERVICE_URL=http://medisupply-autenticador:8080
       - PUBSUB_EMULATOR_HOST=pubsub:8120
       - PUBSUB_TOPIC_PRODUCTS_IMPORT=inventory.processing.products
     volumes:
