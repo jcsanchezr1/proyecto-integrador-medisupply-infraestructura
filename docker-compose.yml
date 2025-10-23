@@ -176,7 +176,7 @@ services:
     image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
     volumes:
       - ./pubsub:/pubsub
-    command: sh /pubsub/init-local.sh
+    command: bash /pubsub/init-local.sh
     ports:
       - "8120:8120"
     networks:
