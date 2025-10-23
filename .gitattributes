@@ -1,0 +1,8 @@
+# Forzar LF para scripts de bash en todos los sistemas operativos
+*.sh text eol=lf
+
+# Forzar LF para archivos de configuración comunes
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.sql text eol=lf
