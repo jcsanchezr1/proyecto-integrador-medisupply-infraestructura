@@ -4,7 +4,7 @@
 PROJECT_ID="clean-result-473723-t3"
 TOPIC_NAME="inventory.processing.products"
 SUBSCRIPTION_NAME="inventory.processing.products.processor"
-ENDPOINT_URL="https://medisupply-inventory-processor-ms-1034901101791.us-central1.run.app/inventory/products/files/process"
+ENDPOINT_URL="https://medisupply-inventory-processor-ms-1034901101791.us-central1.run.app/inventory-procesor/products/files"
 
 # Colores para output
 RED='\033[0;31m'
