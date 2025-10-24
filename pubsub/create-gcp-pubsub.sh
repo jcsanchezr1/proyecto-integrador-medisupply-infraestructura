@@ -4,7 +4,7 @@
 PROJECT_ID="clean-result-473723-t3"
 TOPIC_NAME="inventory.processing.products"
 SUBSCRIPTION_NAME="inventory.processing.products.processor"
-ENDPOINT_URL="https://medisupply-inventory-processor-ms-1034901101791.us-central1.run.app/inventory-procesor/products"
+ENDPOINT_URL="https://medisupply-inventory-processor-ms-1034901101791.us-central1.run.app/inventory-procesor/products/files"
 DLT_TOPIC_NAME="inventory.processing.products.dlt"
 DLT_SUBSCRIPTION_NAME="inventory.processing.products.dlt.processor"
 MAX_DELIVERY_ATTEMPTS="5"
@@ -62,16 +62,16 @@ print_message "$GREEN" "✓ Dead Letter Topic creado exitosamente"
 print_message "$YELLOW" "Creando suscripción para Dead Letter Topic ${DLT_SUBSCRIPTION_NAME}..."
 gcloud pubsub subscriptions create "$DLT_SUBSCRIPTION_NAME" \
     --topic="$DLT_TOPIC_NAME" \
-    --message-retention-duration="1800s"
+    --expiration-period=never \
+    --message-retention-duration="600s"
 print_message "$GREEN" "✓ Suscripción DLT creada exitosamente"
 
 # Crear la suscripción push con Dead Letter Topic
 print_message "$YELLOW" "Creando suscripción ${SUBSCRIPTION_NAME} con Dead Letter Topic..."
 gcloud pubsub subscriptions create "$SUBSCRIPTION_NAME" \
     --topic="$TOPIC_NAME" \
+    --expiration-period=never \
     --push-endpoint="$ENDPOINT_URL" \
-    --message-retention-duration="7d" \
-    --ack-deadline="10" \
     --dead-letter-topic="$DLT_TOPIC_NAME" \
     --max-delivery-attempts="$MAX_DELIVERY_ATTEMPTS"
 print_message "$GREEN" "✓ Suscripción creada exitosamente con Dead Letter Topic"
