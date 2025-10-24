@@ -4,8 +4,9 @@
 PROJECT_ID="clean-result-473723-t3"
 TOPIC_NAME="inventory.processing.products"
 SUBSCRIPTION_NAME="inventory.processing.products.processor"
-ENDPOINT_URL="https://medisupply-inventory-processor-ms-1034901101791.us-central1.run.app/inventory-procesor/products/files"
+ENDPOINT_URL="https://medisupply-inventory-processor-ms-1034901101791.us-central1.run.app/inventory-procesor/products"
 DLT_TOPIC_NAME="inventory.processing.products.dlt"
+DLT_SUBSCRIPTION_NAME="inventory.processing.products.dlt.processor"
 MAX_DELIVERY_ATTEMPTS="5"
 
 # Colores para output
@@ -49,64 +50,33 @@ gcloud services enable pubsub.googleapis.com
 
 # Crear el tópico
 print_message "$YELLOW" "Creando tópico ${TOPIC_NAME}..."
-if gcloud pubsub topics create "$TOPIC_NAME" 2>/dev/null; then
-    print_message "$GREEN" "✓ Tópico creado exitosamente"
-else
-    if gcloud pubsub topics describe "$TOPIC_NAME" &>/dev/null; then
-        print_message "$YELLOW" "→ El tópico ya existe"
-    else
-        print_message "$RED" "Error al crear el tópico"
-        exit 1
-    fi
-fi
+gcloud pubsub topics create "$TOPIC_NAME"
+print_message "$GREEN" "✓ Tópico creado exitosamente"
 
 # Crear el Dead Letter Topic
 print_message "$YELLOW" "Creando Dead Letter Topic ${DLT_TOPIC_NAME}..."
-if gcloud pubsub topics create "$DLT_TOPIC_NAME" 2>/dev/null; then
-    print_message "$GREEN" "✓ Dead Letter Topic creado exitosamente"
-else
-    if gcloud pubsub topics describe "$DLT_TOPIC_NAME" &>/dev/null; then
-        print_message "$YELLOW" "→ El Dead Letter Topic ya existe"
-    else
-        print_message "$RED" "Error al crear el Dead Letter Topic"
-        exit 1
-    fi
-fi
+gcloud pubsub topics create "$DLT_TOPIC_NAME"
+print_message "$GREEN" "✓ Dead Letter Topic creado exitosamente"
+
+# Crear suscripción para el Dead Letter Topic (pull subscription)
+print_message "$YELLOW" "Creando suscripción para Dead Letter Topic ${DLT_SUBSCRIPTION_NAME}..."
+gcloud pubsub subscriptions create "$DLT_SUBSCRIPTION_NAME" \
+    --topic="$DLT_TOPIC_NAME" \
+    --message-retention-duration="1800s"
+print_message "$GREEN" "✓ Suscripción DLT creada exitosamente"
 
 # Crear la suscripción push con Dead Letter Topic
 print_message "$YELLOW" "Creando suscripción ${SUBSCRIPTION_NAME} con Dead Letter Topic..."
-if gcloud pubsub subscriptions create "$SUBSCRIPTION_NAME" \
+gcloud pubsub subscriptions create "$SUBSCRIPTION_NAME" \
     --topic="$TOPIC_NAME" \
     --push-endpoint="$ENDPOINT_URL" \
     --message-retention-duration="7d" \
     --ack-deadline="10" \
     --dead-letter-topic="$DLT_TOPIC_NAME" \
-    --max-delivery-attempts="$MAX_DELIVERY_ATTEMPTS" 2>/dev/null; then
-    print_message "$GREEN" "✓ Suscripción creada exitosamente con Dead Letter Topic"
-    print_message "$GREEN" "  - Máximo de reintentos: ${MAX_DELIVERY_ATTEMPTS}"
-    print_message "$GREEN" "  - Dead Letter Topic: ${DLT_TOPIC_NAME}"
-else
-    if gcloud pubsub subscriptions describe "$SUBSCRIPTION_NAME" &>/dev/null; then
-        print_message "$YELLOW" "→ La suscripción ya existe"
-        
-        # Actualizar la configuración de la suscripción existente
-        print_message "$YELLOW" "Actualizando configuración de la suscripción con Dead Letter Topic..."
-        gcloud pubsub subscriptions modify-push-config "$SUBSCRIPTION_NAME" \
-            --push-endpoint="$ENDPOINT_URL"
-        
-        # Actualizar configuración de Dead Letter Topic
-        gcloud pubsub subscriptions update "$SUBSCRIPTION_NAME" \
-            --dead-letter-topic="$DLT_TOPIC_NAME" \
-            --max-delivery-attempts="$MAX_DELIVERY_ATTEMPTS"
-        
-        print_message "$GREEN" "✓ Configuración de suscripción actualizada con Dead Letter Topic"
-        print_message "$GREEN" "  - Máximo de reintentos: ${MAX_DELIVERY_ATTEMPTS}"
-        print_message "$GREEN" "  - Dead Letter Topic: ${DLT_TOPIC_NAME}"
-    else
-        print_message "$RED" "Error al crear la suscripción"
-        exit 1
-    fi
-fi
+    --max-delivery-attempts="$MAX_DELIVERY_ATTEMPTS"
+print_message "$GREEN" "✓ Suscripción creada exitosamente con Dead Letter Topic"
+print_message "$GREEN" "  - Máximo de reintentos: ${MAX_DELIVERY_ATTEMPTS}"
+print_message "$GREEN" "  - Dead Letter Topic: ${DLT_TOPIC_NAME}"
 
 print_message "$GREEN" "¡Configuración completada exitosamente!"
 print_message "$GREEN" "Resumen:"
@@ -115,3 +85,5 @@ print_message "$GREEN" "- Tópico: ${TOPIC_NAME}"
 print_message "$GREEN" "- Suscripción: ${SUBSCRIPTION_NAME}"
 print_message "$GREEN" "- Endpoint: ${ENDPOINT_URL}"
 print_message "$GREEN" "- Dead Letter Topic: ${DLT_TOPIC_NAME}"
+print_message "$GREEN" "- Suscripción DLT: ${DLT_SUBSCRIPTION_NAME}"
+print_message "$GREEN" "- Máximo de reintentos: ${MAX_DELIVERY_ATTEMPTS}"
