@@ -72,10 +72,11 @@ services:
       - KEYCLOAK_SERVER_URL=http://keycloak:8080
       - KEYCLOAK_REALM=medisupply-realm
       - KEYCLOAK_CLIENT_ID=medisupply-app
-      - AUTHENTICATOR_SERVICE_URL=http://medisupply-autenticador:8080
-      - INVENTORIES_SERVICE_URL=http://medisupply-inventarios:8080
-      - PROVIDERS_SERVICE_URL=http://medisupply-proveedores:8080
-      - ORDERS_SERVICE_URL=http://medisupply-pedidos:8080
+      - AUTHENTICATOR_SERVICE_URL=http://autenticador:8080
+      - INVENTORIES_SERVICE_URL=http://inventarios:8080
+      - PROVIDERS_SERVICE_URL=http://proveedores:8080
+      - ORDERS_SERVICE_URL=http://pedidos:8080
+      - SALES_PLAN_SERVICE_URL=http://plan-ventas:8080
     ports:
       - "8082:8080"
     depends_on: [keycloak]
@@ -121,8 +122,8 @@ services:
       - BUCKET_LOCATION=us-central1
       - GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-credentials.json
       - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
-      - PROVIDERS_SERVICE_URL=http://medisupply-proveedores:8080
-      - AUTHENTICATOR_SERVICE_URL=http://medisupply-autenticador:8080
+      - PROVIDERS_SERVICE_URL=http://proveedores:8080
+      - AUTHENTICATOR_SERVICE_URL=http://autenticador:8080
       - PUBSUB_EMULATOR_HOST=pubsub:8120
       - PUBSUB_TOPIC_PRODUCTS_IMPORT=inventory.processing.products
     volumes:
@@ -142,7 +143,7 @@ services:
       - HOST=0.0.0.0
       - DEBUG=true
       - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
-      - INVENTORY_SERVICE_URL=http://medisupply-inventarios:8080
+      - INVENTORY_SERVICE_URL=http://inventarios:8080
     ports:
       - "8085:8080"
     depends_on: [medisupply-db]
@@ -169,6 +170,23 @@ services:
     ports:
       - "8086:8080"
     depends_on: [medisupply-db]
+    networks:
+      - medisupply-net
+
+  plan-ventas:
+    image: medisupply-plan-ventas
+    container_name: medisupply-plan-ventas
+    build:
+      context: ../proyecto-integrador-medisupply-plan-ventas-backend
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
+      - DEBUG=true
+      - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
+      - AUTH_SERVICE_URL=http://autenticador:8080
+    ports:
+      - "8087:8080"
+    depends_on: [medisupply-db, autenticador]
     networks:
       - medisupply-net
 
