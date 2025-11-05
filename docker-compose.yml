@@ -77,6 +77,7 @@ services:
       - PROVIDERS_SERVICE_URL=http://proveedores:8080
       - ORDERS_SERVICE_URL=http://pedidos:8080
       - SALES_PLAN_SERVICE_URL=http://plan-ventas:8080
+      - LOGISTICS_SERVICE_URL=http://logistica:8080
     ports:
       - "8082:8080"
     depends_on: [keycloak]
@@ -187,6 +188,23 @@ services:
     ports:
       - "8087:8080"
     depends_on: [medisupply-db, autenticador]
+    networks:
+      - medisupply-net
+
+  logistica:
+    image: medisupply-logistica
+    container_name: medisupply-logistica
+    build:
+      context: ../proyecto-integrador-medisupply-logistica-backend
+    environment:
+      - HOST=0.0.0.0
+      - DEBUG=true
+      - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
+      - ORDERS_SERVICE_URL=http://pedidos:8080
+      - AUTH_SERVICE_URL=http://autenticador:8080
+    ports:
+      - "8088:8080"
+    depends_on: [medisupply-db, pedidos, autenticador]
     networks:
       - medisupply-net
 
