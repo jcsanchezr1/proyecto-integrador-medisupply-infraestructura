@@ -184,7 +184,15 @@ services:
       - PORT=8080
       - DEBUG=true
       - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
+      - GCP_PROJECT_ID=clean-result-473723-t3
       - AUTH_SERVICE_URL=http://autenticador:8080
+      - BUCKET_NAME=medisupply-images-bucket
+      - BUCKET_FOLDER=sales-plan
+      - BUCKET_LOCATION=us-central1
+      - GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-credentials.json
+      - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
+    volumes:
+      - ./credentials/gcp-credentials.json:/tmp/gcp-credentials.json:ro
     ports:
       - "8087:8080"
     depends_on: [medisupply-db, autenticador]
