@@ -145,6 +145,7 @@ services:
       - DEBUG=true
       - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
       - INVENTORY_SERVICE_URL=http://inventarios:8080
+      - AUTH_SERVICE_URL=http://autenticador:8080
     ports:
       - "8085:8080"
     depends_on: [medisupply-db]
