@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS users_medisupply (
     applicant_email varchar(100),
     latitude REAL,
     longitude REAL,
+    status varchar(50),
     enabled boolean NOT NULL DEFAULT FALSE,
     created_at timestamptz NOT NULL DEFAULT timezone('UTC', now()),
     updated_at timestamptz NOT NULL DEFAULT timezone('UTC', now())
