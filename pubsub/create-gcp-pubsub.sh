@@ -8,6 +8,11 @@ ENDPOINT_URL="https://medisupply-inventory-processor-ms-1034901101791.us-central
 DLT_TOPIC_NAME="inventory.processing.products.dlt"
 DLT_SUBSCRIPTION_NAME="inventory.processing.products.dlt.processor"
 MAX_DELIVERY_ATTEMPTS="5"
+VIDEO_TOPIC_NAME="salesplan.processing.videos"
+VIDEO_SUBSCRIPTION_NAME="salesplan.processing.videos.processor"
+VIDEO_ENDPOINT_URL="https://medisupply-file-processor-ms-1034901101791.us-central1.run.app/files-procesor/video"
+VIDEO_DLT_TOPIC_NAME="salesplan.processing.videos.dlt"
+VIDEO_DLT_SUBSCRIPTION_NAME="salesplan.processing.videos.dlt.processor"
 
 # Colores para output
 RED='\033[0;31m'
@@ -78,6 +83,32 @@ print_message "$GREEN" "✓ Suscripción creada exitosamente con Dead Letter Top
 print_message "$GREEN" "  - Máximo de reintentos: ${MAX_DELIVERY_ATTEMPTS}"
 print_message "$GREEN" "  - Dead Letter Topic: ${DLT_TOPIC_NAME}"
 
+# Crear tópico y suscripción para videos
+print_message "$YELLOW" "Creando tópico ${VIDEO_TOPIC_NAME}..."
+gcloud pubsub topics create "$VIDEO_TOPIC_NAME"
+print_message "$GREEN" "✓ Tópico de videos creado exitosamente"
+
+# Crear Dead Letter Topic y suscripción (pull) para videos
+print_message "$YELLOW" "Creando Dead Letter Topic ${VIDEO_DLT_TOPIC_NAME} para videos..."
+gcloud pubsub topics create "$VIDEO_DLT_TOPIC_NAME"
+print_message "$GREEN" "✓ Dead Letter Topic de videos creado exitosamente"
+
+print_message "$YELLOW" "Creando suscripción DLT ${VIDEO_DLT_SUBSCRIPTION_NAME} para videos..."
+gcloud pubsub subscriptions create "$VIDEO_DLT_SUBSCRIPTION_NAME" \
+    --topic="$VIDEO_DLT_TOPIC_NAME" \
+    --expiration-period=never \
+    --message-retention-duration="600s"
+print_message "$GREEN" "✓ Suscripción DLT de videos creada exitosamente"
+
+print_message "$YELLOW" "Creando suscripción ${VIDEO_SUBSCRIPTION_NAME} para videos..."
+gcloud pubsub subscriptions create "$VIDEO_SUBSCRIPTION_NAME" \
+    --topic="$VIDEO_TOPIC_NAME" \
+    --expiration-period=never \
+    --push-endpoint="$VIDEO_ENDPOINT_URL" \
+    --dead-letter-topic="$VIDEO_DLT_TOPIC_NAME" \
+    --max-delivery-attempts="$MAX_DELIVERY_ATTEMPTS"
+print_message "$GREEN" "✓ Suscripción de videos creada exitosamente"
+
 print_message "$GREEN" "¡Configuración completada exitosamente!"
 print_message "$GREEN" "Resumen:"
 print_message "$GREEN" "- Proyecto: ${PROJECT_ID}"
@@ -87,3 +118,6 @@ print_message "$GREEN" "- Endpoint: ${ENDPOINT_URL}"
 print_message "$GREEN" "- Dead Letter Topic: ${DLT_TOPIC_NAME}"
 print_message "$GREEN" "- Suscripción DLT: ${DLT_SUBSCRIPTION_NAME}"
 print_message "$GREEN" "- Máximo de reintentos: ${MAX_DELIVERY_ATTEMPTS}"
+print_message "$GREEN" "- Tópico videos: ${VIDEO_TOPIC_NAME}"
+print_message "$GREEN" "- Suscripción videos: ${VIDEO_SUBSCRIPTION_NAME}"
+print_message "$GREEN" "- Endpoint videos: ${VIDEO_ENDPOINT_URL}"

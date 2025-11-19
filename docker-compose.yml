@@ -192,6 +192,8 @@ services:
       - BUCKET_LOCATION=us-central1
       - GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-credentials.json
       - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
+      - PUBSUB_TOPIC_VIDEO_PROCESSING=salesplan.processing.videos
+      - PUBSUB_EMULATOR_HOST=pubsub:8120
     volumes:
       - ./credentials/gcp-credentials.json:/tmp/gcp-credentials.json:ro
     ports:
@@ -214,6 +216,29 @@ services:
     ports:
       - "8088:8080"
     depends_on: [medisupply-db, pedidos, autenticador]
+    networks:
+      - medisupply-net
+
+  archivos-procesador:
+    image: medisupply-archivos-procesador
+    container_name: medisupply-archivos-procesador
+    build:
+      context: ../proyecto-integrador-medisupply-procesador-archivos-backend
+    environment:
+      - HOST=0.0.0.0
+      - DEBUG=true
+      - DATABASE_URL=postgresql://medisupply_local_user:medisupply_local_password@medisupply-db:5432/medisupply_local_db
+      - GCP_PROJECT_ID=clean-result-473723-t3
+      - BUCKET_NAME=medisupply-images-bucket
+      - BUCKET_FOLDER=sales-plan
+      - BUCKET_LOCATION=us-central1
+      - GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-credentials.json
+      - SIGNING_SERVICE_ACCOUNT_EMAIL=medisupply-signing@clean-result-473723-t3.iam.gserviceaccount.com
+    volumes:
+      - ./credentials/gcp-credentials.json:/tmp/gcp-credentials.json:ro
+    ports:
+      - "8089:8080"
+    depends_on: [medisupply-db]
     networks:
       - medisupply-net
 

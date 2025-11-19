@@ -18,9 +18,20 @@ curl -X PUT http://localhost:8120/v1/projects/clean-result-473723-t3/topics/inve
 curl -X PUT -H "Content-Type: application/json" -d '{
   "topic": "projects/clean-result-473723-t3/topics/inventory.processing.products",
   "pushConfig": {
-    "pushEndpoint": "http://medisupply-inventarios-procesador:8080/inventory-procesor/products/files "
+    "pushEndpoint": "http://medisupply-inventarios-procesador:8080/inventory-procesor/products/files"
   }
-}' http://localhost:8120/v1/projects/clean-result-473723-t3/subscriptions/inventory.processing.products.processo
+}' http://localhost:8120/v1/projects/clean-result-473723-t3/subscriptions/inventory.processing.products.processor
+
+# Crear el tópico videos
+curl -X PUT http://localhost:8120/v1/projects/clean-result-473723-t3/topics/salesplan.processing.videos
+
+# Crear la suscripción videos
+curl -X PUT -H "Content-Type: application/json" -d '{
+  "topic": "projects/clean-result-473723-t3/topics/salesplan.processing.videos",
+  "pushConfig": {
+    "pushEndpoint": "http://medisupply-archivos-procesador:8080/files-procesor/video"
+  }
+}' http://localhost:8120/v1/projects/clean-result-473723-t3/subscriptions/salesplan.processing.videos.processor
 
 # Mantener el script ejecutándose y esperar señales de terminación
 wait $PUBSUB_PID
