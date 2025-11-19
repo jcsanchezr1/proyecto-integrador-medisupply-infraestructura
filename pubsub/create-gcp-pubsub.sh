@@ -106,6 +106,7 @@ gcloud pubsub subscriptions create "$VIDEO_SUBSCRIPTION_NAME" \
     --expiration-period=never \
     --push-endpoint="$VIDEO_ENDPOINT_URL" \
     --dead-letter-topic="$VIDEO_DLT_TOPIC_NAME" \
+    --ack-deadline=600 \
     --max-delivery-attempts="$MAX_DELIVERY_ATTEMPTS"
 print_message "$GREEN" "✓ Suscripción de videos creada exitosamente"
 
